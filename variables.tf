@@ -72,6 +72,11 @@ variable "kms_keys" {
   default = {}
 }
 
+variable "data_kms_keys" {
+  type    = map(any)
+  default = {}
+}
+
 variable "data_eips" {
   type    = map(any)
   default = {}
