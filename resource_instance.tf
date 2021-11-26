@@ -15,7 +15,7 @@ resource "aws_instance" "instances" {
       device_name           = ebs_block_device.value.device_name
       encrypted             = ebs_block_device.value.encrypted
       iops                  = ebs_block_device.value.iops
-      kms_key_id            = ebs_block_device.value.encrypted ? aws_kms_key.kms_keys[ebs_block_device.value.kms_key_id_key].arn : null
+      kms_key_id            = ebs_block_device.value.encrypted ? [for key, value in merge(aws_kms_key.kms_keys, data.aws_kms_key.kms_keys) : value.arn if key == ebs_block_device.value.kms_key_id_ref][0] : null
       snapshot_id           = ebs_block_device.value.snapshot_id
       tags = merge(
         {
