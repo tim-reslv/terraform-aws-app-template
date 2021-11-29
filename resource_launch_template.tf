@@ -14,7 +14,7 @@ resource "aws_launch_template" "launch_templates" {
         delete_on_termination = block_device_mappings.value.delete_on_termination
         encrypted             = block_device_mappings.value.encrypted
         iops                  = block_device_mappings.value.iops
-        kms_key_id            = block_device_mappings.value.encrypted ? aws_kms_key.kms_keys[block_device_mappings.value.kms_key_id_key].arn : null
+        kms_key_id            = block_device_mappings.value.encrypted ? [for key, value in merge(aws_kms_key.kms_keys, data.aws_kms_key.kms_keys) : value.arn if key == block_device_mappings.value.kms_key_id_ref][0] : null
         throughput            = block_device_mappings.value.throughput
         volume_type           = block_device_mappings.value.volume_type
         volume_size           = block_device_mappings.value.volume_size
